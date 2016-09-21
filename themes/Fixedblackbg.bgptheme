@@ -76,7 +76,7 @@ override_git_prompt_colors() {
     echo -n "${BG_BLACK}${BOLD}${LIGHT_GREY}${PS1_1}${BLUE}${PS1_2}${RESET_BOLD}${FG_DEF}"
   }
 
-  local gp_end=" \n${BG_BLACK}${BLUE}${Time12a}${RESET_ALL}"
+  local gp_end=" \n${BG_BLACK}${YELLOW}${Time12a}${RESET_ALL}"
   GIT_PROMPT_END_USER="${gp_end} ${BOLD}\$${RESET_ALL} "
   GIT_PROMPT_END_ROOT="${gp_end} ${BOLD}#${RESET_ALL} "
   #GIT_PROMPT_END_ROOT="${gp_end} # "
