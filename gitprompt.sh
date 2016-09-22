@@ -420,7 +420,8 @@ function checkUpstream() {
     if [[ -n $(git remote show) ]]; then
       (
         async_run "git fetch --quiet"
-        disown -h
+		sleep 2
+        #disown -h
       )
     fi
   fi
