@@ -323,7 +323,7 @@ function setGitPrompt() {
   if [[ ! -e "$repo" ]] && [[ "$GIT_PROMPT_ONLY_IN_REPO" = 1 ]]; then
     # we do not permit bash-git-prompt outside git repos, so nothing to do EXCEPT set my own prompt
     #PS1="$OLD_GITPROMPT"
-	ps1_prompt
+    ps1_prompt
     return
   fi
 
@@ -420,7 +420,7 @@ function checkUpstream() {
     if [[ -n $(git remote show) ]]; then
       (
         async_run "git fetch --quiet"
-		wait
+        wait
         #disown -h
       )
     fi
