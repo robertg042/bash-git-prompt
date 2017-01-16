@@ -102,7 +102,7 @@ override_git_prompt_colors() {
 	## template for displaying the current virtual environment
 	## use the placeholder _VIRTUALENV_ will be replaced with
 	## the name of the current virtual environment (currently CONDA and VIRTUAL_ENV)
-	GIT_PROMPT_VIRTUALENV="(${BG_BLACK}${BLUE}_VIRTUALENV_${ResetColor}) "
+	GIT_PROMPT_VIRTUALENV="(${BG_BLACK}${GREEN}_VIRTUALENV_${ResetColor}) "
 
 	# template for displaying the current remote tracking branch
 	# use the placeholder _UPSTREAM_ will be replaced with
