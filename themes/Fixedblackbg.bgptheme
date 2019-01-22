@@ -66,13 +66,20 @@ override_git_prompt_colors() {
 	INVERSE="\[\033[4m\]"
 	RESET_BOLD="\[\033[21m\]"
 	RESET_ALL="\[\033[0m\]"
-	# Time12a="\$(date +%H:%M)"
+	Time12a="\$(date +%H:%M)"
 	#PathShort="\w";
 
 
+  # Possible to change which command is used to create git status information
+  # There are three options:
+  # 1) gitstatus.sh (uses git status --branch --porcelain - fast, requires git > 1.7.10)
+  # 2) gitstatus_pre-1.7.10.sh (Uses a variety of git commands and pipes - slower, works with older git clients)
+  # 3) gitstatus.py (Unsupported, lack features found in the bash versions)
+  if [ -z "${GIT_PROMPT_STATUS_COMMAND+x}" ]; then GIT_PROMPT_STATUS_COMMAND="gitstatus.sh"; fi    # Point out the command to get the git status from
+
 	GIT_PROMPT_START_USER="${BG_BLACK}_LAST_COMMAND_INDICATOR_${BG_BLACK} ${RESET_ALL}"
-	GIT_PROMPT_COMMAND_OK="${GREEN}${BOLD}✔ "                 # _last_command_indicator if the last command returned with an exit code of 0
-	GIT_PROMPT_COMMAND_FAIL="${RED}${BOLD}✘ -_LAST_COMMAND_STATE_" # _last_command_indicator if the last command returned with an exit code of other than 0
+	GIT_PROMPT_COMMAND_OK="${GREEN}${BOLD}✔"                 # _last_command_indicator if the last command returned with an exit code of 0
+	GIT_PROMPT_COMMAND_FAIL="${RED}${BOLD}✘-_LAST_COMMAND_STATE_" # _last_command_indicator if the last command returned with an exit code of other than 0
 	#Overrides the prompt_callback function used by bash-git-prompt
 	function prompt_callback {
 		local PS1_1="\h: "
@@ -90,16 +97,16 @@ override_git_prompt_colors() {
 	GIT_PROMPT_PREFIX="${BG_BLACK}${LIGHT_GREY}["            # start of the git info string
 	GIT_PROMPT_SUFFIX="${BG_BLACK}${LIGHT_GREY}]${RESET_ALL}" # the end of the git info string
 	GIT_PROMPT_SEPARATOR="${BG_BLACK}${LIGHT_GREY}|"         # separates each item
-
 	GIT_PROMPT_BRANCH="${BG_BLACK}${GREEN}"                  # the git branch that is active in the current directory
-  GIT_PROMPT_STAGED="${BG_BLACK}${CYAN} ● "								 # the number of staged files/directories
-	GIT_PROMPT_CONFLICTS="${BG_BLACK}${BOLD}${RED} ✖ "        # the number of files in conflict
-	GIT_PROMPT_CHANGED="${BG_BLACK}${BOLD}${LIGHT_BLUE} ✚ "         # the number of changed files
+	if [ -z "${GIT_PROMPT_MASTER_BRANCH+x}" ]; then GIT_PROMPT_MASTER_BRANCH="${GIT_PROMPT_BRANCH}"; fi  # used if the git branch that is active in the current directory is $GIT_PROMPT_MASTER_BRANCHES
+  GIT_PROMPT_STAGED="${BG_BLACK}${CYAN}●"								 # the number of staged files/directories
+	GIT_PROMPT_CONFLICTS="${BG_BLACK}${BOLD}${RED}✖ "        # the number of files in conflict
+	GIT_PROMPT_CHANGED="${BG_BLACK}${BOLD}${LIGHT_BLUE}✚ "         # the number of changed files
 
 	# GIT_PROMPT_REMOTE=" "                 # the remote branch name (if any) and the symbols for ahead and behind
-	GIT_PROMPT_UNTRACKED="${BG_BLACK}${LIGHT_GREY} …"        # the number of untracked files/dirs
+	GIT_PROMPT_UNTRACKED="${BG_BLACK}${LIGHT_GREY}…"        # the number of untracked files/dirs
 	GIT_PROMPT_STASHED="${BG_BLACK}${BOLD}${MAGENTA}⚑ "      # the number of stashed files/dir
-	GIT_PROMPT_CLEAN="${BG_BLACK}${BOLD}${GREEN}✔ "           # a colored flag indicating a "clean" repo
+	GIT_PROMPT_CLEAN="${BG_BLACK}${BOLD}${GREEN}✔"           # a colored flag indicating a "clean" repo
 
 	## template for displaying the current virtual environment
 	## use the placeholder _VIRTUALENV_ will be replaced with
@@ -118,10 +125,16 @@ override_git_prompt_colors() {
 	# GIT_PROMPT_END_ROOT=" \n${White}${Time12a}${ResetColor} # "
 
 	## Please do not add colors to these symbols
-	GIT_PROMPT_SYMBOLS_AHEAD="${BG_BLACK}${BOLD}${YELLOW}↑ " # The symbol for "n versions ahead of origin"
-	GIT_PROMPT_SYMBOLS_BEHIND="${BG_BLACK}${BOLD}${RED}↓ "   # The symbol for "n versions behind of origin"
+	GIT_PROMPT_SYMBOLS_AHEAD="${BG_BLACK}${BOLD}${YELLOW}↑" # The symbol for "n versions ahead of origin"
+	GIT_PROMPT_SYMBOLS_BEHIND="${BG_BLACK}${BOLD}${RED}↓"   # The symbol for "n versions behind of origin"
 	GIT_PROMPT_SYMBOLS_PREHASH="${BG_BLACK}${LIGHT_GREY}:"   # Written before hash of commit, if no name could be found
 	GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="${BG_BLACK}${BOLD}${RED}Local" # This symbol is written after the branch, if the branch is not tracked
+
+  # branch name(s) that will use $GIT_PROMPT_MASTER_BRANCH color
+  # To specify multiple branches, use
+  #   shopt -s extglob
+  #   GIT_PROMPT_MASTER_BRANCHES='@(master|production)'
+  if [ -z ${GIT_PROMPT_MASTER_BRANCHES+x} ]; then GIT_PROMPT_MASTER_BRANCHES="master"; fi
 }
 
 reload_git_prompt_colors "Fixedblackbg"

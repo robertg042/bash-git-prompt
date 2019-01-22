@@ -1,8 +1,8 @@
 class BashGitPrompt < Formula
   desc "Informative, fancy bash prompt for Git users"
   homepage "https://github.com/magicmonty/bash-git-prompt"
-  url "https://github.com/magicmonty/bash-git-prompt/archive/2.6.1.tar.gz"
-  sha256 "d2e58eaaae521cbcf3758a38cbc9233ea2e24a47dd907e64cdb514f30bd7b9ed"
+  url "https://github.com/magicmonty/bash-git-prompt/archive/2.7.1.tar.gz"
+  sha256 "5e5fc6f5133b65760fede8050d4c3bc8edb8e78bc7ce26c16db442aa94b8a709"
   head "https://github.com/magicmonty/bash-git-prompt.git"
 
   bottle :unneeded
@@ -16,13 +16,16 @@ class BashGitPrompt < Formula
     doc.install "README.md"
   end
 
-  def caveats; <<-EOS.undent
-    You should add the following to your .bashrc (or equivalent):
-      if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
-        GIT_PROMPT_THEME=Default
-        __GIT_PROMPT_DIR=$(brew --prefix)/opt/bash-git-prompt/share
-        source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
+  def caveats; <<~EOS
+    You should add the following to your .bashrc (or .bash_profile if bash is your login shell):
+      if [ -f "#{HOMEBREW_PREFIX}/opt/bash-git-prompt/share/gitprompt.sh" ]; then
+        __GIT_PROMPT_DIR="#{HOMEBREW_PREFIX}/opt/bash-git-prompt/share"
+        source "#{HOMEBREW_PREFIX}/opt/bash-git-prompt/share/gitprompt.sh"
       fi
     EOS
+  end
+
+  test do
+    system "true"
   end
 end
