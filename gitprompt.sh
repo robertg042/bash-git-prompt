@@ -439,10 +439,9 @@ function checkUpstream() {
   then
     if [[ -n $(git remote show) ]]; then
       (
-        # async_run "git fetch --quiet"
         async_run "GIT_TERMINAL_PROMPT=0 git fetch --quiet"
-        wait
-        #disown -h
+        # wait
+        disown -h
       )
     fi
   fi
@@ -536,7 +535,7 @@ function updatePrompt() {
 
     if [[ -z "${GIT_REMOTE_USERNAME_REPO+x}" ]]; then
       local GIT_PROMPT_PREFIX_FINAL="${GIT_PROMPT_PREFIX//_USERNAME_REPO_/${ResetColor}}"
-    else 
+    else
       if [[ -z "${GIT_PROMPT_USERNAME_REPO_SEPARATOR+x}" ]]; then
         local GIT_PROMPT_PREFIX_FINAL="${GIT_PROMPT_PREFIX//_USERNAME_REPO_/${GIT_REMOTE_USERNAME_REPO}${ResetColor}}"
       else
@@ -593,7 +592,7 @@ function updatePrompt() {
       __chk_gitvar_status 'CLEAN'      '= "1"'   -
     fi
     __add_status        "${ResetColor}${GIT_PROMPT_SUFFIX}"
-    
+
     NEW_PROMPT="$(gp_add_virtualenv_to_prompt)${PROMPT_START}$(${prompt_callback})${STATUS_PREFIX}${STATUS}${PROMPT_END}"
   else
     NEW_PROMPT="${EMPTY_PROMPT}"
